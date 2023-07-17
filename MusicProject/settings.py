@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 세션 데이터를 데이터베이스에 저장
+SESSION_COOKIE_NAME = 'musicproject'  # 세션 쿠키 이름 설정
+SESSION_COOKIE_AGE = 0  # 세션 쿠키 유효 시간 설정 (초 단위)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,9 +33,14 @@ ALLOWED_HOSTS = [
     'MadCampWeek3',
     'localhost',
     '127.10.9.34',
-    '127.0.0.1'
+    '127.0.0.1',
+    '127.0.0.1:8000',
+    '127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://localhost:3003',
+    'https://4385-192-249-19-234.ngrok.io',
+    '4385-192-249-19-234.ngrok.io',
     ]
-
 
 # Application definition
 
@@ -44,10 +53,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'MusicApp',
 
+    'corsheaders',
+
     'rest_framework',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # CORS 추가
+    'django.middleware.common.CommonMiddleware',  # CORS 추가
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -98,7 +113,7 @@ DATABASES = {
     }
 }
 
-
+AUTH_USER_MODEL = 'MusicApp.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -140,3 +155,38 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://0a16-192-249-19-234.ngrok.io",
+]
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:8000', 
+    'http://localhost:3001', 
+    'https://4385-192-249-19-234.ngrok.io/',
+    'localhost:3000')
